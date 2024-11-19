@@ -32,7 +32,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_NO_INTERACTION=1 COMPOSER_CACHE_DIR="/tm
 WORKDIR /app
 
 # Copying manifest files to host
-COPY ./8.3-kazza/manifest /
+COPY ./8.3/manifest /
 
 # Caddy
 COPY --from=builder /usr/bin/caddy /usr/local/bin/caddy
