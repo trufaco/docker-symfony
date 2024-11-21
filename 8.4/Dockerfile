@@ -15,7 +15,7 @@ RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH xcaddy build
 # -----------------------------------------------------
 # App Itself
 # -----------------------------------------------------
-FROM php:8.4.0RC4-fpm-alpine
+FROM php:$PHP_VERSION-fpm-alpine
 
 ARG PORT=9001
 ARG PUBLIC_DIR=public
