@@ -7,6 +7,8 @@
         }
     }
 
+    redir /index.php* /
+
     php_fastcgi 127.0.0.1:9000 {
         trusted_proxies private_ranges
     }
@@ -28,5 +30,5 @@
     }
 
     push
-    encode gzip
+    encode zstd gzip
 }
