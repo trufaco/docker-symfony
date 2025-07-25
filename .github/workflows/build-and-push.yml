@@ -2,6 +2,7 @@ name: Build Docker Image
 
 on:
     push:
+    workflow_dispatch:
 
 env:
     REGISTRY: ghcr.io
@@ -13,9 +14,8 @@ jobs:
             fail-fast: false
             matrix:
                 phpversion:
-                    #- 8.3
-                    - 8.4
-        runs-on: ubuntu-latest
+                    - '8.4'
+        runs-on: ubuntu-24.04
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -41,9 +41,8 @@ jobs:
             fail-fast: false
             matrix:
                 phpversion:
-                    #- 8.3
-                    - 8.4
-        runs-on: ubuntu-latest-arm64
+                    - '8.4'
+        runs-on: ubuntu-24.04-arm
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -70,9 +69,8 @@ jobs:
             fail-fast: false
             matrix:
                 phpversion:
-                    #- 8.3
-                    - 8.4
-        runs-on: ubuntu-latest
+                    - '8.4'
+        runs-on: ubuntu-24.04
         steps:
             - name: Checkout
               uses: actions/checkout@v4
