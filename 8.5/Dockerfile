@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.4
+ARG PHP_VERSION=8.5
 ARG CADDY_VERSION=2
 
 # -----------------------------------------------------
@@ -38,7 +38,7 @@ COPY --from=composer/composer:2-bin /composer /usr/bin/composer
 WORKDIR /app
 
 # Copying manifest files to host
-COPY ./8.4/manifest /
+COPY ./8.5/manifest /
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
