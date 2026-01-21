@@ -14,7 +14,6 @@ jobs:
             fail-fast: false
             matrix:
                 phpversion:
-                    - '8.4'
                     - '8.5'
         runs-on: ubuntu-24.04
         steps:
@@ -42,7 +41,6 @@ jobs:
             fail-fast: false
             matrix:
                 phpversion:
-                    - '8.4'
                     - '8.5'
         runs-on: ubuntu-24.04-arm
         steps:
@@ -71,7 +69,6 @@ jobs:
             fail-fast: false
             matrix:
                 phpversion:
-                    - '8.4'
                     - '8.5'
         runs-on: ubuntu-24.04
         steps:
