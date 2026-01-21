@@ -1,6 +1,5 @@
 ARG PHP_VERSION=8.5
 ARG CADDY_VERSION=2
-ARG NODE_VERSION=24
 
 # -----------------------------------------------------
 # Caddy Install
@@ -64,11 +63,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends ${BUILD_DEPS} \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Install nodeJS
-RUN ARCH=$(dpkg --print-architecture) && \
-       if [ "$ARCH" = "amd64" ]; then ARCH="x64"; fi && \
-       curl -fsSL "https://nodejs.org/dist/latest-v${NODE_VERSION}.x/node-v$(curl -fsSL https://nodejs.org/dist/latest-v${NODE_VERSION}.x/SHASUMS256.txt | head -1 | grep -oP 'node-v\K[0-9.]+')-linux-${ARCH}.tar.xz" -o /tmp/node.tar.xz && \
-       tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1 && \
-       rm /tmp/node.tar.xz
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y nodejs
 
 ####################################################################################################
 # Install latest libvips
