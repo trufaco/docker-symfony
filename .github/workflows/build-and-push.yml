@@ -1,7 +1,10 @@
 name: Build Docker Image
 
+# Pull requests and other branches build the images; only master pushes them to the registry.
 on:
     push:
+        branches: [master]
+    pull_request:
     workflow_dispatch:
 
 env:
@@ -15,6 +18,7 @@ jobs:
             matrix:
                 phpversion:
                     - '8.5'
+                    - '8.6'
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
@@ -27,14 +31,17 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build and Push Docker Image
+            - name: Build Docker Image
               run: |
                   docker pull ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-amd64 || true
                   docker build \
                     --cache-from "${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-amd64" \
                     -f ${{ matrix.phpversion }}/Dockerfile \
                     -t ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-amd64 .
-                  docker push ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-amd64
+
+            - name: Push Docker Image
+              if: github.ref == 'refs/heads/master'
+              run: docker push ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-amd64
 
     build-and-push-arm64:
         strategy:
@@ -42,6 +49,7 @@ jobs:
             matrix:
                 phpversion:
                     - '8.5'
+                    - '8.6'
         runs-on: ubuntu-24.04-arm
         steps:
             - name: Checkout
@@ -54,22 +62,27 @@ jobs:
                   username: ${{ github.repository_owner }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build and Push Docker Image
+            - name: Build Docker Image
               run: |
                   docker pull ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-arm64 || true
                   docker build \
                     --cache-from "${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-arm64" \
                     -f ${{ matrix.phpversion }}/Dockerfile \
                     -t ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-arm64 .
-                  docker push ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-arm64
+
+            - name: Push Docker Image
+              if: github.ref == 'refs/heads/master'
+              run: docker push ${{ env.REGISTRY_IMAGE_NAME }}:${{ matrix.phpversion }}-arm64
 
     create-multiarch-manifests:
+        if: github.ref == 'refs/heads/master'
         needs: [build-and-push-amd64, build-and-push-arm64]
         strategy:
             fail-fast: false
             matrix:
                 phpversion:
                     - '8.5'
+                    - '8.6'
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout
